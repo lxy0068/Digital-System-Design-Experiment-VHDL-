@@ -1,0 +1,24 @@
+LIBRARY IEEE;
+USE IEEE.std_logic_1164.ALL;
+USE work.components.all;
+
+entity fadd4 is
+port (a, b: in std_logic_vector(3 downto 0);
+	ci: in std_logic;
+	co: out std_logic;
+	sum: out std_logic_vector(3 downto 0));
+end fadd4;
+
+architecture stru of fadd4 is
+signal ci_ns: std_logic_vector(3 downto 0);
+begin
+	gen_adders: FOR i IN 0 TO 3 generate
+	adder: fadd PORT MAP(
+	a => a(i),
+	b => b(i),
+	ci => (ci when i = 0 else ci_ns(i - 1)),
+	co => (co when i = 3 else ci_ns(i)),
+	sum => sum(i)
+	);
+	end generate;
+end stru;
